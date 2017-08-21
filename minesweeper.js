@@ -2,17 +2,22 @@ document.addEventListener('DOMContentLoaded', startGame)
 
 // Define your `board` object here!
 // "Boards is an object that contains an array of objects"
+
 var board = new Object ();
-board.cells = [{row: 0, col: 0, isMine: true, isMarked: true, hidden:   true},
-               {row: 0, col: 1, isMine: true, isMarked: true, hidden: true},
-               {row: 0, col: 2, isMine: true, isMarked: true, hidden: true},
-               {row: 1, col: 0, isMine: true, isMarked: true, hidden: true},
-               {row: 1, col: 1, isMine: true, isMarked: true, hidden: true},
-               {row: 1, col: 2, isMine: true, isMarked: true, hidden: true},
-               {row: 2, col: 0, isMine: true, isMarked: true, hidden: true},
-               {row: 2, col: 1, isMine: true, isMarked: true, hidden: true},
-               {row: 2, col: 2, isMine: true, isMarked: true, hidden: true}
-              ];
+var cell = {row: 0, col: 0, isMine: true, isMarked: true, hidden: true, surroundingMines: 0};
+board.cells = [];
+
+// var board = new Object ();
+// board.cells = [{row: 0, col: 0, isMine: true, isMarked: true, hidden: true},
+//                {row: 0, col: 1, isMine: true, isMarked: true, hidden: true},
+//                {row: 0, col: 2, isMine: true, isMarked: true, hidden: true},
+//                {row: 1, col: 0, isMine: true, isMarked: true, hidden: true},
+//                {row: 1, col: 1, isMine: true, isMarked: true, hidden: true},
+//                {row: 1, col: 2, isMine: true, isMarked: true, hidden: true},
+//                {row: 2, col: 0, isMine: true, isMarked: true, hidden: true},
+//                {row: 2, col: 1, isMine: true, isMarked: true, hidden: true},
+//                {row: 2, col: 2, isMine: true, isMarked: true, hidden: true}
+//               ];
 
 // Or can use
 // var board = {
@@ -60,6 +65,36 @@ function startGame () {
     document.addEventListener('contextmenu',checkForWin);
     console.log("startGame initiated");
 
+    // code to generate board
+    function findCellRange() {
+      var rand = Math.random();
+      var rowColLength = 0;
+      if (rand <= 0.2) {
+         rowColLength = 2;
+      } else if (rand > 0.2 && rand <= 0.4) {
+         rowColLength = 3;
+      } else if (rand > 0.4 && rand <= 0.6) {
+         rowColLength = 4;
+      } else if (rand > 0.6 && rand <= 0.8) {
+         rowColLength = 5;
+      } else {
+         rowColLength = 6;
+      }
+      return rowColLength;
+    }
+
+    var boardSize = findCellRange();
+
+    function buildBoard() {
+      for (var i = 0; i < (boardSize * boardSize); i++) {
+      board.cells.push(cell);
+      }
+      return board;
+    }
+
+    buildBoard();
+
+    // code to check for each cell how many mines surrounding
     for(var i = 0; i < board.cells.length; i++) {
     board.cells[i].surroundingMines = countSurroundingMines(board.cells[i]);
     console.log("loop working");
@@ -68,9 +103,6 @@ function startGame () {
   // supply separate row & column data to formula countSurroundingMines?
   lib.initBoard()
 }
-
-// Useful for later? rand = Math.random(),
-
 
 // Define this function to look for a win condition:
 //
