@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', startGame)
 // "Boards is an object that contains an array of objects"
 
 var board = new Object ();
-var cell = {row: 0, col: 0, isMine: true, isMarked: true, hidden: true, surroundingMines: 0};
 board.cells = [];
 
 // var board = new Object ();
@@ -66,28 +65,51 @@ function startGame () {
     console.log("startGame initiated");
 
     // code to generate board
-    function findCellRange() {
-      var rand = Math.random();
-      var rowColLength = 0;
-      if (rand <= 0.2) {
-         rowColLength = 2;
-      } else if (rand > 0.2 && rand <= 0.4) {
-         rowColLength = 3;
-      } else if (rand > 0.4 && rand <= 0.6) {
-         rowColLength = 4;
-      } else if (rand > 0.6 && rand <= 0.8) {
-         rowColLength = 5;
-      } else {
-         rowColLength = 6;
-      }
-      return rowColLength;
+    // alternative
+    function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
     }
+    // function findCellRange() {
+    //   var rand = Math.random();
+    //   var rowColLength = 0;
+    //   if (rand <= 0.2) {
+    //      rowColLength = 2;
+    //   } else if (rand > 0.2 && rand <= 0.4) {
+    //      rowColLength = 3;
+    //   } else if (rand > 0.4 && rand <= 0.6) {
+    //      rowColLength = 4;
+    //   } else if (rand > 0.6 && rand <= 0.8) {
+    //      rowColLength = 5;
+    //   } else {
+    //      rowColLength = 6;
+    //   }
+    //   return rowColLength;
+    // }
 
-    var boardSize = findCellRange();
+    var boardSize = getRandomIntInclusive(2,6);
 
     function buildBoard() {
-      for (var i = 0; i < (boardSize * boardSize); i++) {
-      board.cells.push(cell);
+      var row = 0;
+      var col = 0;
+      for (var i = 1; i <= (boardSize * boardSize); i++) {
+        var newCell = {isMine: false, isMarked: false, hidden: true, surroundingMines: 0};
+        newCell.row = row;
+        newCell.col = col;
+        if (getRandomIntInclusive(1,5) == 1) {
+          newCell.isMine = true;
+        }
+        board.cells.push(newCell);
+        if (col === boardSize - 1) {
+          col = 0;
+        } else {
+          col++;
+        }
+
+        if (i % (boardSize) === 0) {
+          row = row + 1;
+        }
       }
       return board;
     }
@@ -120,8 +142,8 @@ function checkForWin () {
   // detected that they've won, that is!)
       lib.displayMessage('You win!')
     }
+  }
 }
-
 // Define this function to count the number of mines around the cell
 // (there could be as many as 8). You don't have to get the surrounding
 // cells yourself! Just use `lib.getSurroundingCells`:
@@ -136,7 +158,7 @@ function countSurroundingMines (cell) {
     var surroundingCells = lib.getSurroundingCells(cell.row, cell.col);
     for(var k = 0; k < surroundingCells.length; k++) {
         console.log('for loop working');
-        if (surroundingCells[k].isMine property === true) {
+        if (surroundingCells[k].isMine === true) {
           count += 1;
         }
     }
