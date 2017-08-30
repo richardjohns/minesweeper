@@ -69,7 +69,7 @@ function startGame () {
     function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
+    return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive, ie returns random whoile number between 2 & 6.
     }
     // function findCellRange() {
     //   var rand = Math.random();
@@ -137,10 +137,16 @@ function checkForWin () {
         break;
       } else if (board.cells[i].isMine === true && board.cells[i].hidden === true ) {
         break;
+      } else if (board.cells[i].isMine === false && board.cells[i].hidden === true ) {
+        break;
       } else {
   // You can use this function call to declare a winner (once you've
   // detected that they've won, that is!)
       lib.displayMessage('You win!')
+      // reset board by setting board object length to 0.
+      // Board.cells.length = 0;
+      // startGame();
+      // run initboard function again
     }
   }
 }
